@@ -3,17 +3,35 @@
 	<name>JSONPlugin</name>
 	<class>n</class>
 	<config>
-		<id>0</id>
+		<id>4</id>
 		<module>JSONPlugin</module>
 		<sequence>0</sequence>
 		<key>active</key>
 		<value>true</value>
 	</config>
 	<config>
-		<id>1</id>
+		<id>5</id>
 		<module>JSONPlugin</module>
 		<sequence>1</sequence>
 		<key>storage</key>
 		<value>false</value>
 	</config>
+	<action>
+		<id>0</id>
+		<name>objectFromJson</name>
+		<description>Creates an object from the specified json.</description>
+		<module>JSONPlugin</module>
+		<class>net.scientifichooliganism.jsonplugin.JSONPlugin</class>
+		<!--<url></url>-->
+		<method>objectFromJson</method>
+	</action>
+	<action>
+		<id>1</id>
+		<name>jsonFromObject</name>
+		<description>Creates json from an object.</description>
+		<module>JSONPlugin</module>
+		<class>net.scientifichooliganism.jsonplugin.JSONPlugin</class>
+		<!--<url></url>-->
+		<method>jsonFromObject</method>
+	</action>
 </plugin>

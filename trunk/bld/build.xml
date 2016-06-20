@@ -194,7 +194,7 @@
 		</zip>
 	</target>
 
-	<target name="build" depends="prep,compile,jar,zip" description=""/>
+	<target name="build" depends="compile,jar,zip" description=""/>
 
 	<target name="all" depends="prep,compile,compile_tests,run_tests,jar,javadoc,zip" description=""/>
 </project>
