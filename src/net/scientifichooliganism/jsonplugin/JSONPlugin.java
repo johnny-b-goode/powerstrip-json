@@ -1,17 +1,17 @@
 package net.scientifichooliganism.jsonplugin;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.scientifichooliganism.javaplug.interfaces.*;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import net.scientifichooliganism.javaplug.interfaces.Action;
+import net.scientifichooliganism.javaplug.interfaces.Plugin;
 import net.scientifichooliganism.javaplug.vo.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 public class JSONPlugin implements Plugin {
-	static final String BASE_CLASS_NAME = "net.scientifichooliganism.javaplug.vo.Base";
-	Pattern classPattern = Pattern.compile("\\w+");
-	Pattern classStripPattern = Pattern.compile("\\{[^{}]+\\}");
 	Gson gson;
 
 	JSONPlugin () {
@@ -25,70 +25,84 @@ public class JSONPlugin implements Plugin {
 		return new String[0][];
 	}
 
-	public <T extends ValueObject> String jsonFromObject(T object){
+	public String jsonFromObject(Object object){
 		return gson.toJson(object);
 	}
 
-	public <T extends ValueObject> T objectFromJson(String json){
-		return objectFromJson(stripClass(json), classFromJson(json));
+	public Object objectFromJson(String json, Type type) {
+		return gson.fromJson(json, type);
 	}
 
-	public <T> T objectFromJson(String json, Class klass){
-		// Equate interfaces with class types
-		if(klass == Action.class){
-			klass = BaseAction.class;
-		} else if (klass == Application.class) {
-			klass = BaseApplication.class;
-		} else if (klass == Block.class) {
-			klass = BaseBlock.class;
-		} else if (klass == Configuration.class) {
-			klass = BaseConfiguration.class;
-		} else if (klass == Environment.class) {
-			klass = BaseEnvironment.class;
-		} else if (klass == Event.class) {
-			klass = BaseEvent.class;
-		} else if (klass == Release.class) {
-			klass = BaseRelease.class;
-		} else if (klass == Task.class) {
-			klass = BaseTask.class;
-		} else if (klass == TaskCategory.class) {
-			klass = BaseTaskCategory.class;
-		} else if (klass == Transaction.class) {
-			klass = BaseTransaction.class;
-		} else if (klass == ValueObject.class) {
-			klass = BaseValueObject.class;
-		}
-
-		return (T)gson.fromJson(json, klass);
-	}
-
-	private String stripClass(String json){
-		Matcher matcher = classStripPattern.matcher(json);
-		if(matcher.find()){
-			return matcher.group();
-		} else {
-			throw new RuntimeException("Ill-formatted JSON");
-		}
-	}
-
-	private Class classFromJson(String json){
-		Matcher matcher = classPattern.matcher(json);
-		String className = null;
-		Class ret = null;
-		if(matcher.find()){
-			className = matcher.group();
-		}
-		if(className != null){
+	public Object objectFromJson(String json) {
+		JsonParser parser = new JsonParser();
+		JsonObject object = parser.parse(json).getAsJsonObject();
+		Collection ret = new ArrayList();
+		for(Map.Entry<String, JsonElement> entry : object.entrySet()){
 			try {
-				ret = Class.forName(BASE_CLASS_NAME + className);
-			}
-			catch (Exception exc){
-				System.out.println("Class specified (" + className + ") not found!");
+				Type type = classFromString(entry.getKey());
+				Object instance = gson.fromJson(entry.getValue(), type);
+				ret.add(instance);
+			} catch (Exception exc){
 				exc.printStackTrace();
 			}
 		}
 
-		return ret;
+		if(ret.size() == 1){
+			return ret.iterator().next();
+		} else {
+			return ret;
+		}
+	}
+
+	private Type classFromString(String className) throws ClassNotFoundException{
+		switch(className.toLowerCase()){
+			case "action":
+				return BaseAction.class;
+			case "actions":
+				return new TypeToken<Collection<BaseAction>>(){}.getType();
+			case "application":
+				return BaseApplication.class;
+			case "applications":
+				return new TypeToken<Collection<BaseApplication>>(){}.getType();
+			case "block":
+				return BaseBlock.class;
+			case "blocks":
+				return new TypeToken<Collection<BaseBlock>>(){}.getType();
+			case "configuration":
+				return BaseConfiguration.class;
+			case "configurations":
+				return new TypeToken<Collection<BaseConfiguration>>(){}.getType();
+			case "environment":
+				return BaseEnvironment.class;
+			case "environments":
+				return new TypeToken<Collection<BaseEnvironment>>(){}.getType();
+			case "event":
+				return BaseEvent.class;
+			case "events":
+				return new TypeToken<Collection<BaseEvent>>(){}.getType();
+			case "release":
+				return BaseRelease.class;
+			case "releases":
+				return new TypeToken<Collection<BaseRelease>>(){}.getType();
+			case "task":
+				return BaseTask.class;
+			case "tasks":
+				return new TypeToken<Collection<BaseTask>>(){}.getType();
+			case "task_category":
+				return BaseTaskCategory.class;
+			case "task_categories":
+				return new TypeToken<Collection<BaseTaskCategory>>(){}.getType();
+			case "transaction":
+				return BaseTransaction.class;
+			case "transactions":
+				return new TypeToken<Collection<BaseTransaction>>(){}.getType();
+			case "value_object":
+				return BaseValueObject.class;
+			case "value_objects":
+				return new TypeToken<Collection<BaseValueObject>>(){}.getType();
+			default:
+				return Class.forName(className);
+		}
 	}
 
 	public static void main(String [] args){
@@ -102,9 +116,11 @@ public class JSONPlugin implements Plugin {
 		action.setURL("www.google.com");
 		action.setMethod("myMethod");
 		String json = plugin.jsonFromObject(action);
-		Action object = plugin.objectFromJson(json, Action.class);
+		Action object = (Action)plugin.objectFromJson(json, BaseAction.class);
 		String classJson = "{ \"Action\" : " + json + " }";
-		Action classObject = plugin.objectFromJson(classJson);
+		Object classObject = plugin.objectFromJson(classJson);
+
+
 		System.out.println(json);
 		System.out.println(object);
 		System.out.println(classObject);
