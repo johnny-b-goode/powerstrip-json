@@ -15,7 +15,7 @@ public class JSONPlugin implements Plugin {
 	Gson gson;
 
 	JSONPlugin () {
-		gson = new GsonBuilder().setPrettyPrinting()
+		gson = new GsonBuilder() //.setPrettyPrinting()
 				.setFieldNamingStrategy(new JavaPlugFieldNamingStrategy())
 				.create();
 	}
