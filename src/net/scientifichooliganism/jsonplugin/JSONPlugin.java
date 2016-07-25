@@ -14,8 +14,8 @@ import java.util.Map;
 public class JSONPlugin implements Plugin {
 	Gson gson;
 
-	JSONPlugin () {
-		gson = new GsonBuilder() //.setPrettyPrinting()
+	public JSONPlugin () {
+		gson = new GsonBuilder().setPrettyPrinting()
 				.setFieldNamingStrategy(new JavaPlugFieldNamingStrategy())
 				.create();
 	}

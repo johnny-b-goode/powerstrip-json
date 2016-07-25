@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
 	<name>JSONPlugin</name>
-	<class>n</class>
-	<config>
-		<id>4</id>
+	<class>net.scientifichooliganism.jsonplugin.JSONPlugin</class>
+	<configuration>
 		<module>JSONPlugin</module>
 		<sequence>0</sequence>
 		<key>active</key>
 		<value>true</value>
-	</config>
-	<config>
-		<id>5</id>
+	</configuration>
+	<configuration>
 		<module>JSONPlugin</module>
 		<sequence>1</sequence>
 		<key>storage</key>
 		<value>false</value>
-	</config>
+	</configuration>
 	<action>
-		<id>0</id>
 		<name>objectFromJson</name>
 		<description>Creates an object from the specified json.</description>
 		<module>JSONPlugin</module>
@@ -26,7 +23,6 @@
 		<method>objectFromJson</method>
 	</action>
 	<action>
-		<id>1</id>
 		<name>jsonFromObject</name>
 		<description>Creates json from an object.</description>
 		<module>JSONPlugin</module>
