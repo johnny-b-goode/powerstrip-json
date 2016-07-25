@@ -108,7 +108,7 @@ public class JSONPlugin implements Plugin {
 	public static void main(String [] args){
 		JSONPlugin plugin = new JSONPlugin();
 		Action action = new BaseAction();
-		action.setID(42);
+		action.setID(String.valueOf(42));
 		action.setLabel("Default Label");
 		action.setDescription("This is my description");
 		action.setModule("Awesome module!");
