@@ -190,6 +190,7 @@
 	<target name="zip" depends="clean_zip" description="">
 		<zip destfile="${zip}/JSONPlugin.zip" basedir="${bin}" whenempty="fail">
 			<zipfileset dir="${bin}" />
+			<zipfileset dir="${lib}"  includes="gson-2.7.jar"/>
 			<zipfileset dir="${rsrc}" includes="JSONPlugin.xml" />
 		</zip>
 	</target>
