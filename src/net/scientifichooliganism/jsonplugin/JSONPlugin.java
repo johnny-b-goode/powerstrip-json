@@ -2,6 +2,7 @@ package net.scientifichooliganism.jsonplugin;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import net.scientifichooliganism.javaplug.annotations.Param;
 import net.scientifichooliganism.javaplug.interfaces.Action;
 import net.scientifichooliganism.javaplug.interfaces.Plugin;
 import net.scientifichooliganism.javaplug.vo.*;
@@ -25,7 +26,7 @@ public class JSONPlugin implements Plugin {
 		return new String[0][];
 	}
 
-	public String jsonFromObject(Object object){
+	public String jsonFromObject(@Param(name="object") Object object){
 		return gson.toJson(object);
 	}
 
@@ -33,7 +34,7 @@ public class JSONPlugin implements Plugin {
 		return gson.fromJson(json, type);
 	}
 
-	public Object objectFromJson(String json) {
+	public Object objectFromJson(@Param(name="json") String json) {
 		JsonParser parser = new JsonParser();
 		JsonObject object = parser.parse(json).getAsJsonObject();
 		Collection ret = new ArrayList();
