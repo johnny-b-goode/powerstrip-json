@@ -18,9 +18,13 @@ public class JavaPlugFieldNamingStrategy implements FieldNamingStrategy {
 
     @Override
     public String translateName(Field field) {
-        if(field.getName().toLowerCase() == "klass"){
+        if(field.getName().toLowerCase().equals("klass")){
             return "class";
-        } else {
+        } else if(field.getName().toLowerCase().equals("metadata")) {
+            return "meta-data";
+        } else if(field.getName().toLowerCase().equals("objectid")) {
+            return "object_id";
+        }else {
             return defaultPolicy.translateName(field);
         }
     }

@@ -152,6 +152,12 @@
 		</javac>
 	</target>
 
+	<target name="update_libs" description="">
+		<get src="http://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" dest="${lib}" verbose="true" usetimestamp="true" maxtime="60" retries="1" />
+		<get src="http://repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar" dest="${lib}" verbose="true" usetimestamp="true" maxtime="60" retries="1" />
+        <get src="http://search.maven.org/remotecontent?filepath=com/google/code/gson/gson/2.7/gson-2.7.jar" dest="${lib}" verbose="true" usetimestamp="true" maxtime="60" retries="1" />
+	</target>
+
 	<target name="run_tests" description="">
 		<junit printsummary="withOutAndErr" haltonerror="true" haltonfailure="true" showoutput="true" logfailedtests="true">
 			<classpath>

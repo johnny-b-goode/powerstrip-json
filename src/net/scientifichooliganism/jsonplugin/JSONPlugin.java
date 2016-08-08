@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.scientifichooliganism.javaplug.annotations.Param;
 import net.scientifichooliganism.javaplug.interfaces.Action;
+import net.scientifichooliganism.javaplug.interfaces.MetaData;
 import net.scientifichooliganism.javaplug.interfaces.Plugin;
 import net.scientifichooliganism.javaplug.vo.*;
 
@@ -18,6 +19,7 @@ public class JSONPlugin implements Plugin {
 	public JSONPlugin () {
 		gson = new GsonBuilder().setPrettyPrinting()
 				.setFieldNamingStrategy(new JavaPlugFieldNamingStrategy())
+				.registerTypeAdapter(MetaData.class, new MetaDataAdapter())
 				.create();
 	}
 
@@ -30,7 +32,7 @@ public class JSONPlugin implements Plugin {
 		return gson.toJson(object);
 	}
 
-	public Object objectFromJson(String json, Type type) {
+	private Object objectFromJson(String json, Type type) {
 		return gson.fromJson(json, type);
 	}
 
@@ -81,6 +83,8 @@ public class JSONPlugin implements Plugin {
 				return BaseEvent.class;
 			case "events":
 				return new TypeToken<Collection<BaseEvent>>(){}.getType();
+			case "meta-data":
+				return BaseMetaData.class;
 			case "release":
 				return BaseRelease.class;
 			case "releases":
@@ -108,6 +112,19 @@ public class JSONPlugin implements Plugin {
 
 	public static void main(String [] args){
 		JSONPlugin plugin = new JSONPlugin();
+		MetaData data1 = new BaseMetaData();
+		MetaData data2 = new BaseMetaData();
+        data1.setKey("key1");
+		data2.setKey("key2");
+        data1.setValue("value1");
+		data2.setValue("value2");
+        data1.setSequence(0);
+		data2.setSequence(1);
+
+		data1.setID("12");
+		data1.setObject("object");
+		data1.setObjectID("542");
+		data1.setLabel("label");
 		Action action = new BaseAction();
 		action.setID(String.valueOf(42));
 		action.setLabel("Default Label");
@@ -116,14 +133,17 @@ public class JSONPlugin implements Plugin {
 		action.setKlass("Class of 2016");
 		action.setURL("www.google.com");
 		action.setMethod("myMethod");
+		action.addMetaData(data1);
+		action.addMetaData(data2);
 		String json = plugin.jsonFromObject(action);
+		System.out.println(json);
 		Action object = (Action)plugin.objectFromJson(json, BaseAction.class);
-		String classJson = "{ \"Action\" : " + json + " }";
-		Object classObject = plugin.objectFromJson(classJson);
+//		String classJson = "{ \"Action\" : " + json + " }";
+//		Object classObject = plugin.objectFromJson(classJson);
 
 
 		System.out.println(json);
 		System.out.println(object);
-		System.out.println(classObject);
+//		System.out.println(classObject);
 	}
 }
