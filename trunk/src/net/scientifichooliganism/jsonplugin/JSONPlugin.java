@@ -28,10 +28,10 @@ public class JSONPlugin implements Plugin {
 
 	public String jsonFromObject(@Param(name="object") Object object){
 		String objectName = null;
-		if(object instanceof ValueObject){
+		if(ValueObject.class.isAssignableFrom(object.getClass())){
 			objectName = stringFromObject((ValueObject)object);
 		} else {
-			objectName = objectName.getClass().getSimpleName();
+			objectName = object.getClass().getSimpleName();
 		}
 
 		return "{\"" + objectName + "\":" + gson.toJson(object) + "}";
@@ -65,25 +65,25 @@ public class JSONPlugin implements Plugin {
 	private <T extends ValueObject> String stringFromObject(T object){
 		if(object instanceof Action) {
 		    return "action";
-		} else if(object instanceof Application){
+		} else if(Application.class.isAssignableFrom(object.getClass())){
 		    return "application";
-		} else if(object instanceof Block){
+		} else if(Block.class.isAssignableFrom(object.getClass())){
 			return "block";
-		} else if(object instanceof Configuration){
+		} else if(Configuration.class.isAssignableFrom(object.getClass())){
 			return "configuration";
-		} else if(object instanceof Environment){
+		} else if(Environment.class.isAssignableFrom(object.getClass())){
 			return "environment";
-		} else if(object instanceof Event){
+		} else if(Event.class.isAssignableFrom(object.getClass())){
 			return "event";
-		} else if(object instanceof MetaData){
+		} else if(MetaData.class.isAssignableFrom(object.getClass())){
 			return "meta-data";
-		} else if(object instanceof Release){
+		} else if(Release.class.isAssignableFrom(object.getClass())){
 		    return "release";
-		} else if(object instanceof Task){
+		} else if(Task.class.isAssignableFrom(object.getClass())){
 			return "task";
-		} else if(object instanceof TaskCategory){
+		} else if(TaskCategory.class.isAssignableFrom(object.getClass())){
 			return "task_category";
-		} else if(object instanceof ValueObject){
+		} else if(ValueObject.class.isAssignableFrom(object.getClass())){
 			return "value_object";
 		}
 
