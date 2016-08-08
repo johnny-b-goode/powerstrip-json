@@ -3,9 +3,7 @@ package net.scientifichooliganism.jsonplugin;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.scientifichooliganism.javaplug.annotations.Param;
-import net.scientifichooliganism.javaplug.interfaces.Action;
-import net.scientifichooliganism.javaplug.interfaces.MetaData;
-import net.scientifichooliganism.javaplug.interfaces.Plugin;
+import net.scientifichooliganism.javaplug.interfaces.*;
 import net.scientifichooliganism.javaplug.vo.*;
 
 import java.lang.reflect.Type;
@@ -29,7 +27,14 @@ public class JSONPlugin implements Plugin {
 	}
 
 	public String jsonFromObject(@Param(name="object") Object object){
-		return gson.toJson(object);
+		String objectName = null;
+		if(object instanceof ValueObject){
+			objectName = stringFromObject((ValueObject)object);
+		} else {
+			objectName = objectName.getClass().getSimpleName();
+		}
+
+		return "{\"" + objectName + "\":" + gson.toJson(object) + "}";
 	}
 
 	private Object objectFromJson(String json, Type type) {
@@ -55,6 +60,34 @@ public class JSONPlugin implements Plugin {
 		} else {
 			return ret;
 		}
+	}
+
+	private <T extends ValueObject> String stringFromObject(T object){
+		if(object instanceof Action) {
+		    return "action";
+		} else if(object instanceof Application){
+		    return "application";
+		} else if(object instanceof Block){
+			return "block";
+		} else if(object instanceof Configuration){
+			return "configuration";
+		} else if(object instanceof Environment){
+			return "environment";
+		} else if(object instanceof Event){
+			return "event";
+		} else if(object instanceof MetaData){
+			return "meta-data";
+		} else if(object instanceof Release){
+		    return "release";
+		} else if(object instanceof Task){
+			return "task";
+		} else if(object instanceof TaskCategory){
+			return "task_category";
+		} else if(object instanceof ValueObject){
+			return "value_object";
+		}
+
+		return null;
 	}
 
 	private Type classFromString(String className) throws ClassNotFoundException{
@@ -137,9 +170,7 @@ public class JSONPlugin implements Plugin {
 		action.addMetaData(data2);
 		String json = plugin.jsonFromObject(action);
 		System.out.println(json);
-		Action object = (Action)plugin.objectFromJson(json, BaseAction.class);
-//		String classJson = "{ \"Action\" : " + json + " }";
-//		Object classObject = plugin.objectFromJson(classJson);
+		Action object = (Action)plugin.objectFromJson(json);
 
 
 		System.out.println(json);
