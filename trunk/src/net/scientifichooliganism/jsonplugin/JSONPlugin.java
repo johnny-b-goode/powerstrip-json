@@ -41,7 +41,9 @@ public class JSONPlugin implements Plugin {
 				json += s;
 				json += ",";
 			}
-			json = json.substring(0, json.length() - 1);
+			if(json.charAt(json.length() - 1) == ',') {
+				json = json.substring(0, json.length() - 1);
+			}
 			json += "]}";
 			return json;
 		} else {
