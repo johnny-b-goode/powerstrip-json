@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Vector;
 
 public class JSONPlugin implements Plugin {
 	Gson gson;
@@ -30,6 +31,19 @@ public class JSONPlugin implements Plugin {
 		String objectName = null;
 		if(ValueObject.class.isAssignableFrom(object.getClass())){
 			objectName = stringFromObject((ValueObject)object);
+		} else if(Collection.class.isAssignableFrom(object.getClass())) {
+			Vector<String> jsonStrings = new Vector<>();
+			for(Object o : (Collection)object){
+				jsonStrings.add(jsonFromObject(o));
+			}
+			String json = "{\"objects\":[";
+			for(String s : jsonStrings){
+				json += s;
+				json += ",";
+			}
+			json = json.substring(0, json.length() - 1);
+			json += "]}";
+			return json;
 		} else {
 			objectName = object.getClass().getSimpleName();
 		}
