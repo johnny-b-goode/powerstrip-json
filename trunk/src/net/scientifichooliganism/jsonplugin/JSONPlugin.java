@@ -36,7 +36,7 @@ public class JSONPlugin implements Plugin {
 			for(Object o : (Collection)object){
 				jsonStrings.add(jsonFromObject(o));
 			}
-			String json = "{\"objects\":[";
+			String json = "{\"data\":[";
 			for(String s : jsonStrings){
 				json += s;
 				json += ",";
