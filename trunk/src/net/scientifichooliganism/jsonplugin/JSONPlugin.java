@@ -7,10 +7,7 @@ import net.scientifichooliganism.javaplug.interfaces.*;
 import net.scientifichooliganism.javaplug.vo.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class JSONPlugin implements Plugin {
 	Gson gson;
@@ -19,6 +16,7 @@ public class JSONPlugin implements Plugin {
 		gson = new GsonBuilder().setPrettyPrinting()
 				.setFieldNamingStrategy(new JavaPlugFieldNamingStrategy())
 				.registerTypeAdapter(MetaData.class, new MetaDataAdapter())
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss+Z")
 				.create();
 	}
 
@@ -92,7 +90,7 @@ public class JSONPlugin implements Plugin {
 		} else if(Event.class.isAssignableFrom(object.getClass())){
 			return "event";
 		} else if(MetaData.class.isAssignableFrom(object.getClass())){
-			return "meta-data";
+			return "metadata";
 		} else if(Release.class.isAssignableFrom(object.getClass())){
 		    return "release";
 		} else if(Task.class.isAssignableFrom(object.getClass())){
@@ -132,7 +130,7 @@ public class JSONPlugin implements Plugin {
 				return BaseEvent.class;
 			case "events":
 				return new TypeToken<Collection<BaseEvent>>(){}.getType();
-			case "meta-data":
+			case "metadata":
 				return BaseMetaData.class;
 			case "release":
 				return BaseRelease.class;
@@ -167,8 +165,6 @@ public class JSONPlugin implements Plugin {
 		data2.setKey("key2");
         data1.setValue("value1");
 		data2.setValue("value2");
-        data1.setSequence(0);
-		data2.setSequence(1);
 
 		data1.setID("12");
 		data1.setObject("object");
@@ -184,9 +180,16 @@ public class JSONPlugin implements Plugin {
 		action.setMethod("myMethod");
 		action.addMetaData(data1);
 		action.addMetaData(data2);
-		String json = plugin.jsonFromObject(action);
+
+		Task testTask = new BaseTask();
+		testTask.setID("0");
+		testTask.setStartDate(new Date());
+
+		String json = plugin.jsonFromObject(testTask);
 		System.out.println(json);
-		Action object = (Action)plugin.objectFromJson(json);
+
+
+		Task object = (Task)plugin.objectFromJson(json);
 
 
 		System.out.println(json);
