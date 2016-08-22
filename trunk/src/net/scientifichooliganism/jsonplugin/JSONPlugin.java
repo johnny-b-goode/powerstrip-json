@@ -156,44 +156,4 @@ public class JSONPlugin implements Plugin {
 				return Class.forName(className);
 		}
 	}
-
-	public static void main(String [] args){
-		JSONPlugin plugin = new JSONPlugin();
-		MetaData data1 = new BaseMetaData();
-		MetaData data2 = new BaseMetaData();
-        data1.setKey("key1");
-		data2.setKey("key2");
-        data1.setValue("value1");
-		data2.setValue("value2");
-
-		data1.setID("12");
-		data1.setObject("object");
-		data1.setObjectID("542");
-		data1.setLabel("label");
-		Action action = new BaseAction();
-		action.setID(String.valueOf(42));
-		action.setLabel("Default Label");
-		action.setDescription("This is my description");
-		action.setModule("Awesome module!");
-		action.setKlass("Class of 2016");
-		action.setURL("www.google.com");
-		action.setMethod("myMethod");
-		action.addMetaData(data1);
-		action.addMetaData(data2);
-
-		Task testTask = new BaseTask();
-		testTask.setID("0");
-		testTask.setStartDate(new Date());
-
-		String json = plugin.jsonFromObject(testTask);
-		System.out.println(json);
-
-
-		Task object = (Task)plugin.objectFromJson(json);
-
-
-		System.out.println(json);
-		System.out.println(object);
-//		System.out.println(classObject);
-	}
 }
