@@ -13,7 +13,7 @@ public class JSONPlugin implements Plugin {
 	Gson gson;
 
 	public JSONPlugin () {
-		gson = new GsonBuilder().setPrettyPrinting()
+		gson = new GsonBuilder()
 				.setFieldNamingStrategy(new JavaPlugFieldNamingStrategy())
 				.registerTypeAdapter(MetaData.class, new MetaDataAdapter())
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss+Z")
