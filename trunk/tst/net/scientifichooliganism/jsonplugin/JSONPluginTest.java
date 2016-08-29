@@ -35,7 +35,7 @@ public class JSONPluginTest {
     }
 
     @Test
-    public void test01 () {
+    public void jsonFromObejctTest01 () {
         String metaDataKey = "some_key";
         String metaDataValue = "some_value";
         String metaDataID = "12";
@@ -93,7 +93,7 @@ public class JSONPluginTest {
     }
 
     @Test
-    public void test02(){
+    public void objectFromJsonTest02(){
         String taskName = "some_name";
         String taskStartDateString = "2016-08-10T05:00:00+-0500";
         Date taskStartDate = null;
@@ -110,7 +110,9 @@ public class JSONPluginTest {
             taskCompletedDate = sdf.parse(taskCompletedDateString);
         } catch (Exception exc){
             exc.printStackTrace();
-            fail("Error parsing date strings!\nException: " + exc.getClass().getSimpleName() + "\nMessage: " + exc.getMessage());
+            fail("Error parsing date strings!\n" +
+                    "Exception: " + exc.getClass().getSimpleName() + "\n" +
+                    "Message: " + exc.getMessage());
         }
 
         Task object = (Task)plugin.objectFromJson(json);
