@@ -4,6 +4,9 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.scientifichooliganism.javaplug.annotations.Param;
 import net.scientifichooliganism.javaplug.interfaces.*;
+import net.scientifichooliganism.javaplug.util.JavaLogger;
+import net.scientifichooliganism.javaplug.util.LumberJack;
+import net.scientifichooliganism.javaplug.util.SpringBoard;
 import net.scientifichooliganism.javaplug.vo.*;
 
 import java.lang.reflect.Type;
@@ -11,6 +14,7 @@ import java.util.*;
 
 public class JSONPlugin implements Plugin {
 	Gson gson;
+    LumberJack logger;
 
 	public JSONPlugin () {
 		gson = new GsonBuilder()
@@ -18,6 +22,7 @@ public class JSONPlugin implements Plugin {
 				.registerTypeAdapter(MetaData.class, new MetaDataAdapter())
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss+Z")
 				.create();
+        logger = JavaLogger.getInstanceForContext(this.getClass().getName());
 	}
 
 	@Override
@@ -26,11 +31,11 @@ public class JSONPlugin implements Plugin {
 	}
 
 	public String jsonFromObject(@Param(name="object") Object object){
-		String objectName = null;
+		String objectName;
 		if(ValueObject.class.isAssignableFrom(object.getClass())){
 			objectName = stringFromObject((ValueObject)object);
 		} else if(Collection.class.isAssignableFrom(object.getClass())) {
-			Vector<String> jsonStrings = new Vector<>();
+			ArrayList<String> jsonStrings = new ArrayList<>();
 			for(Object o : (Collection)object){
 				jsonStrings.add(jsonFromObject(o));
 			}
@@ -65,7 +70,7 @@ public class JSONPlugin implements Plugin {
 				Object instance = gson.fromJson(entry.getValue(), type);
 				ret.add(instance);
 			} catch (Exception exc){
-				exc.printStackTrace();
+			    logger.logException(exc, SpringBoard.ERROR);
 			}
 		}
 
