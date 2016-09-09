@@ -18,9 +18,9 @@ public class JavaPlugFieldNamingStrategy implements FieldNamingStrategy {
 
     @Override
     public String translateName(Field field) {
-        if(field.getName().toLowerCase().equals("klass")){
+        if("klass".equalsIgnoreCase(field.getName())){
             return "class";
-        } else if(field.getName().toLowerCase().equals("objectid")) {
+        } else if ("objectid".equalsIgnoreCase(field.getName())){
             return "object_id";
         }else {
             return defaultPolicy.translateName(field);
